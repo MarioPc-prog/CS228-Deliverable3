@@ -8,6 +8,12 @@ var rawYMax = 100;
 //global variables to keep track of the current umber of hands 
 var previousNumHands = 0 ;
 var currentNumHands = 0;
+
+function RecordData(){
+    if(currentNumHands===1 && previousNumHands ===2){
+        background('#222222');
+    }
+}
 function HandleBone(bone,thick,stroke){
     //the distal end of the bone closest to the finger tip .nextJoint
     var x = bone.nextJoint[0];
@@ -102,6 +108,7 @@ function Handleframe(frame){
                 var hand = frame.hands[0];
                 //console.log(hand);
 		HandleHand(hand);
+                RecordData();
                 previousNumHands = currentNumHands;
                 //console.log(previousNumHands);
 	}
