@@ -5,62 +5,9 @@ var rawXMin = 1000;
 var rawXMax = 100;
 var rawYMin = 1000;
 var rawYMax = 100;
-//function HandleFinger(finger){
-//        //add thickness
-//	var x = finger.tipPosition[0];
-//	var y = finger.tipPosition[1];
-//	//var z=finger.tipPosition[2];
-//	//checks wheather the current horizontal position of the tip is less than the value stored in rawXMin.
-//	if (finger.tipPosition[0] <rawXMin){
-//		rawXMin=finger.tipPosition[0];
-//	}
-//	if (finger.tipPosition[0] > rawXMax){
-//                rawXMax=finger.tipPosition[0];
-//        }
-//	if (finger.tipPosition[1] <rawYMin){
-//                rawYMin=finger.tipPosition[1];
-//        }
-//	if (finger.tipPosition[1] > rawYMax){
-//                rawYMax=finger.tipPosition[1];
-//        }
-//	var oldRangeX = (rawXMax-rawXMin);
-//	var newRangeX=(window.innerWidth-0);
-//	var x =(((x - rawXMin) * newRangeX) /oldRangeX) + 0;
-//
-//	var oldRangeY = (rawYMax-rawYMin);
-//        var newRangeY=(window.innnerHeight-0);
-//        var newY =(((y - rawYMin) * newRangeY) /oldRangeY) + rawYMin;
-//	newY =(y-rawYMin)*(window.innerHeight-0)/(rawYMax-rawYMin)+0;
-//        var bones = finger.bones;
-//        //assigns each thickness to the proper bone 
-//        for (var i=0;i<bones.length;i++){
-//                var thick = strokeWeight(1);
-//                var bone = bones[i];
-//                //console.log(bone);
-//                if(bones[i].type === 0){
-//                    var thick = strokeWeight(10);
-//                    var bone = bones[i];
-//                    stroke(211,211,211);
-//                    HandleBone(bone,thick,stroke);
-//                }
-//                if(bones[i].type === 1){
-//                    var thick = strokeWeight(7);
-//                    var bone = bones[i];
-//                    stroke(51);
-//                    HandleBone(bone,thick,stroke);
-//                }
-//                if(bones[i].type === 2){
-//                    var thick = strokeWeight(4);
-//                    var bone = bones[i];
-//                    stroke(51);
-//                    HandleBone(bone,thick,stroke);
-//                }
-//               
-//                HandleBone(bone,thick);
-//         
-//                
-// }
-//}
+//global variables to keep track of the current umber of hands 
+var previousNumHands = 0 ;
+var currentNumHands = 0;
 function HandleBone(bone,thick,stroke){
     //the distal end of the bone closest to the finger tip .nextJoint
     var x = bone.nextJoint[0];
@@ -80,7 +27,14 @@ function HandleBone(bone,thick,stroke){
     //call line p5 method 
     thick;
     stroke;
-    line(xT,yT,xB,yB);
+    //create a hand variable and and draw only green if only one hand is detected 
+    if (currentNumHands === 1){
+         line(xT,yT,xB,yB);
+    }
+    else{
+        stroke('red');
+        line(xT,yT,xB,yB);
+    }
 }
 function TransformCoordinates(x,y){
         if (x <rawXMin){
@@ -109,10 +63,9 @@ function TransformCoordinates(x,y){
 }
 function HandleHand(hand){
 	var fingers = hand.fingers;
-        console.log(fingers);
+        //console.log(fingers);
         for (var i = 0;i < fingers.length; i++){
             var thick = strokeWeight(2);
-            
             var finger = fingers[i];
             var bones = finger.bones;
             for (var x = 0; x <bones.length; x++){
@@ -120,13 +73,13 @@ function HandleHand(hand){
                 if(bones[x].type === 0){
                     var thick = strokeWeight(10);
                     var bone = bones[x];
-                    stroke(211,211,211);
+                    stroke('rgb(0,255,0)');
                     HandleBone(bone,thick,stroke);
                 }
                 if(bones[x].type === 1){
                     var thick = strokeWeight(10);
                     var bone = bones[x];
-                    stroke(211,211,211);
+                    stroke('rgb(0,255,0)');
                     HandleBone(bone,thick,stroke);
                 }
                 if(bones[x].type === 2){
@@ -142,15 +95,20 @@ function HandleHand(hand){
     }
             
 function Handleframe(frame){
-	if(frame.hands.length===1){
-        	//console.log(frame.hands);
+	if(frame.hands.length===1 || frame.hands.length===2){
+                currentNumHands = frame.hands.length;
+                clear();
+                console.log(currentNumHands);
                 var hand = frame.hands[0];
+                //console.log(hand);
 		HandleHand(hand);
+                previousNumHands = currentNumHands;
+                //console.log(previousNumHands);
 	}
 }
 
 Leap.loop(controllerOptions, function(frame){
-	clear();
+	
 	Handleframe(frame);
 
 });
