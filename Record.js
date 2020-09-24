@@ -28,7 +28,7 @@ function HandleBone(bone,thick,stroke){
     thick;
     stroke;
     //create a hand variable and and draw only green if only one hand is detected 
-    if (currentNumHands === 1){
+    if (previousNumHands === 1){
          line(xT,yT,xB,yB);
     }
     else{
@@ -96,8 +96,8 @@ function HandleHand(hand){
             
 function Handleframe(frame){
 	if(frame.hands.length===1 || frame.hands.length===2){
-                currentNumHands = frame.hands.length;
                 clear();
+                currentNumHands = frame.hands.length;
                 console.log(currentNumHands);
                 var hand = frame.hands[0];
                 //console.log(hand);
