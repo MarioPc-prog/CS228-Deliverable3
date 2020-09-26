@@ -5,10 +5,11 @@ var rawXMin = 1000;
 var rawXMax = 100;
 var rawYMin = 1000;
 var rawYMax = 100;
-//global variables to keep track of the current umber of hands 
+//global variables to keep track of the current number of hands 
 var previousNumHands = 0 ;
 var currentNumHands = 0;
-
+var oneFrameOfData = nj.zeros([5]);
+//creates the black snap 
 function RecordData(){
     if(currentNumHands===1 && previousNumHands ===2){
         background('#222222');
@@ -102,15 +103,16 @@ function HandleHand(hand){
             
 function Handleframe(frame){
 	if(frame.hands.length===1 || frame.hands.length===2){
-                clear();
-                currentNumHands = frame.hands.length;
-                console.log(currentNumHands);
-                var hand = frame.hands[0];
-                //console.log(hand);
-		HandleHand(hand);
-                RecordData();
-                previousNumHands = currentNumHands;
-                //console.log(previousNumHands);
+                  console.log(oneFrameOfData.toString());
+//                clear();
+//                currentNumHands = frame.hands.length;
+//                console.log(currentNumHands);
+//                var hand = frame.hands[0];
+//                //console.log(hand);
+//		HandleHand(hand);
+//                RecordData();
+//                previousNumHands = currentNumHands;
+//                console.log(previousNumHands);
 	}
 }
 
