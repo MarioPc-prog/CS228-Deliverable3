@@ -10,11 +10,12 @@ var rawZmin = 1000;
 //global variables to keep track of the current number of hands 
 var previousNumHands = 0 ;
 var currentNumHands = 0;
-var oneFrameOfData = nj.zeros([5,4]);
+var oneFrameOfData = nj.zeros([5,4,6]);
 //creates the black snap 
 function RecordData(){
-    if(currentNumHands===1 && previousNumHands ===2){
+    if(currentNumHands===1 && previousNumHands === 2){
         background('#222222');
+        console.log(oneFrameOfData.toString());
     }
 }
 function HandleBone(bone,thick,stroke,fingerIndex){
@@ -37,8 +38,16 @@ function HandleBone(bone,thick,stroke,fingerIndex){
     var sum = (xT,xB,yT,yB,z,z1);
     //console.log(sum);
     //store the rresulting sum in the fingerIndexth element of OneFrameOfData
-    oneFrameOfData.set(fingerIndex.type,bone.type,sum);
-    console.log(oneFrameOfData.toString());
+     //oneFrameOfData.set(fingerIndex.type,bone.type,sum);
+     
+    oneFrameOfData.set(fingerIndex.type,bone.type,0,x1);
+    oneFrameOfData.set(fingerIndex.type,bone.type,1,y1);
+    oneFrameOfData.set(fingerIndex.type,bone.type,2,z1);
+    oneFrameOfData.set(fingerIndex.type,bone.type,3,x);
+    oneFrameOfData.set(fingerIndex.type,bone.type,4,y);
+    oneFrameOfData.set(fingerIndex.type,bone.type,5,z);
+    
+  
   
     
    
