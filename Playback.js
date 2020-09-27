@@ -1,156 +1,39 @@
-var controllerOptions = {};
-var x = window.innerWidth;
-var y = window.innerHeight;
-var rawXMin = 1000;
-var rawXMax = 100;
-var rawYMin = 1000;
-var rawYMax = 100;
-//function HandleFinger(finger){
-//        //add thickness
-//	var x = finger.tipPosition[0];
-//	var y = finger.tipPosition[1];
-//	//var z=finger.tipPosition[2];
-//	//checks wheather the current horizontal position of the tip is less than the value stored in rawXMin.
-//	if (finger.tipPosition[0] <rawXMin){
-//		rawXMin=finger.tipPosition[0];
-//	}
-//	if (finger.tipPosition[0] > rawXMax){
-//                rawXMax=finger.tipPosition[0];
-//        }
-//	if (finger.tipPosition[1] <rawYMin){
-//                rawYMin=finger.tipPosition[1];
-//        }
-//	if (finger.tipPosition[1] > rawYMax){
-//                rawYMax=finger.tipPosition[1];
-//        }
-//	var oldRangeX = (rawXMax-rawXMin);
-//	var newRangeX=(window.innerWidth-0);
-//	var x =(((x - rawXMin) * newRangeX) /oldRangeX) + 0;
-//
-//	var oldRangeY = (rawYMax-rawYMin);
-//        var newRangeY=(window.innnerHeight-0);
-//        var newY =(((y - rawYMin) * newRangeY) /oldRangeY) + rawYMin;
-//	newY =(y-rawYMin)*(window.innerHeight-0)/(rawYMax-rawYMin)+0;
-//        var bones = finger.bones;
-//        //assigns each thickness to the proper bone 
-//        for (var i=0;i<bones.length;i++){
-//                var thick = strokeWeight(1);
-//                var bone = bones[i];
-//                //console.log(bone);
-//                if(bones[i].type === 0){
-//                    var thick = strokeWeight(10);
-//                    var bone = bones[i];
-//                    stroke(211,211,211);
-//                    HandleBone(bone,thick,stroke);
-//                }
-//                if(bones[i].type === 1){
-//                    var thick = strokeWeight(7);
-//                    var bone = bones[i];
-//                    stroke(51);
-//                    HandleBone(bone,thick,stroke);
-//                }
-//                if(bones[i].type === 2){
-//                    var thick = strokeWeight(4);
-//                    var bone = bones[i];
-//                    stroke(51);
-//                    HandleBone(bone,thick,stroke);
-//                }
-//               
-//                HandleBone(bone,thick);
-//         
-//                
-// }
-//}
-function HandleBone(bone,thick,stroke){
-    //the distal end of the bone closest to the finger tip .nextJoint
-    var x = bone.nextJoint[0];
-    var y = bone.nextJoint[1];
-    //return from TransformCoordinate is a array , access with [] set to the tip of the bone
-    var xT = TransformCoordinates(x,y)[0];
-    var yT = TransformCoordinates(x,y)[1];
-    //console.log(xT,yT);
-    //var z = bone.nextJoint[2];
-    //the proximal end of the bone closest to the torso 
-    var x1 = bone.prevJoint[0];
-    var y1 = bone.prevJoint[1];
-     //return from TransformCoordinate is a array , access with [] set to the base of the bone
-    var xB = TransformCoordinates(x1,y1)[0];
-    var yB = TransformCoordinates(x1,y1)[1];
-    //var z1 = bone.prevJoint[2]; 
-    //call line p5 method 
-    thick;
-    stroke;
-    line(xT,yT,xB,yB);
-}
-function TransformCoordinates(x,y){
-        if (x <rawXMin){
-		rawXMin = x;
-	}
-	if (x > rawXMax){
-                rawXMax = x;
-        }
-	if (y <rawYMin){
-                rawYMin = y;
-        }
-	if (y > rawYMax){
-                rawYMax = y;
-        }
-        //apply same scaling  
-        var oldRangeX = (rawXMax-rawXMin);
-	var newRangeX=(window.innerWidth-0);
-	x =(((x - rawXMin) * newRangeX) /oldRangeX) + rawXMin;
-        var oldRangeY = (rawYMax-rawYMin);
-        var newRangeY=(window.innnerHeight-0);
-        var newY =(((y - rawYMin) * newRangeY) /oldRangeY) + rawYMin;
-	newY =(y-rawYMin)*(window.innerHeight-0)/(rawYMax-rawYMin)+0;
-        y = window.innerHeight-newY;
-        
-    return [x,y];
-}
-function HandleHand(hand){
-	var fingers = hand.fingers;
-        console.log(fingers);
-        for (var i = 0;i < fingers.length; i++){
-            var thick = strokeWeight(2);
+oneFrameOfData = nj.array([[[ 28.1676, 203.981, 282.419, 28.1676, 203.981, 282.419],
+        [ 28.1676, 203.981, 282.419, 60.9249, 207.767, 249.374],
+        [ 60.9249, 207.767, 249.374, 73.2243, 204.144, 220.179],
+        [ 73.2243, 204.144, 220.179, 79.2124, 200.424, 199.457]],
+       [[ 19.0189, 222.803, 275.108, 37.7703, 227.437, 209.072],
+        [ 37.7703, 227.437, 209.072, 43.2374, 239.535, 171.149],
+        [ 43.2374, 239.535, 171.149, 47.3802, 236.615,  149.12],
+        [ 47.3802, 236.615,  149.12,  50.519, 228.872,   135.5]],
+       [[ 8.10731, 223.414, 271.479, 17.1895, 226.885, 206.959],
+        [ 17.1895, 226.885, 206.959, 11.4677, 242.464, 165.048],
+        [ 11.4677, 242.464, 165.048, 11.1594, 240.524, 138.527],
+        [ 11.1594, 240.524, 138.527, 12.8144, 232.829, 122.813]],
+       [[-2.90619, 221.237, 269.036, -3.4984, 223.183, 210.489],
+        [ -3.4984, 223.183, 210.489,-11.7838, 237.744, 172.209],
+        [-11.7838, 237.744, 172.209,-13.2683, 236.365, 146.381],
+        [-13.2683, 236.365, 146.381,-11.8845, 229.247, 130.483]],
+       [[-13.0578, 212.639, 268.614,-21.4169, 215.531, 215.112],
+        [-21.4169, 215.531, 215.112, -32.299, 226.663, 185.937],
+        [ -32.299, 226.663, 185.937,-34.6022, 225.841, 167.809],
+        [-34.6022, 225.841, 167.809,-33.3507, 219.716,  152.95]]]);
+
+function draw(){
+    var row = 5;
+    var column = 4;
+    clear();
+     for(var x = 0 ;x<=row;x++){
+        for(var y = 0;y<=column;y++){
+            //console.log(oneFrameOfData);
+            var xStart = oneFrameOfData.get(x,y,0);
+            var yStart = oneFrameOfData.get(x,y,1);
+            var zStart = oneFrameOfData.get(x,y,2);
+            var xEnd = oneFrameOfData.get(x,y,3);
+            var yEnd = oneFrameOfData.get(x,y,4);
+            var zEnd = oneFrameOfData.get(x,y,5);
             
-            var finger = fingers[i];
-            var bones = finger.bones;
-            for (var x = 0; x <bones.length; x++){
-                var bone = bones[x];
-                if(bones[x].type === 0){
-                    var thick = strokeWeight(10);
-                    var bone = bones[x];
-                    stroke(211,211,211);
-                    HandleBone(bone,thick,stroke);
-                }
-                if(bones[x].type === 1){
-                    var thick = strokeWeight(10);
-                    var bone = bones[x];
-                    stroke(211,211,211);
-                    HandleBone(bone,thick,stroke);
-                }
-                if(bones[x].type === 2){
-                    var thick = strokeWeight(5);
-                    var bone = bones[x];
-                    stroke(51);
-                    HandleBone(bone,thick,stroke);
-                }
-                HandleBone(bone,thick,stroke);
-         
-            }
+            line(xStart,yStart,xEnd,yEnd);
         }
     }
-            
-function Handleframe(frame){
-	if(frame.hands.length===1){
-        	//console.log(frame.hands);
-                var hand = frame.hands[0];
-		HandleHand(hand);
-	}
 }
-
-Leap.loop(controllerOptions, function(frame){
-	clear();
-	Handleframe(frame);
-
-});
